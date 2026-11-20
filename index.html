@@ -1,1 +1,151 @@
-<!doctype html><meta charset="utf-8"><title>rloop-v2</title><p>The overnight research dashboard is being built; it refreshes every 20 minutes.</p>
+<!doctype html>
+<html lang="en" data-lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Can a scalar value net carry credit across a truncated backward pass?</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<style>
+:root{--ink:#1b1b1f;--mute:#63636e;--line:#e3e1dc;--bg:#fbfaf7;--panel:#f3f1ea;--accent:#1f5fa8;--good:#2a7d4f;--warn:#b26a00;--bad:#b3352b}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.62 Georgia,"Source Serif 4","Noto Serif SC",serif}
+main{max-width:760px;margin:0 auto;padding:36px 20px 80px}
+h1{font-size:34px;line-height:1.2;margin:.2em 0 .3em}
+h2{font-size:25px;margin:2.2em 0 .5em;padding-top:.6em;border-top:1px solid var(--line)}
+h3{font-size:20px;line-height:1.35;margin:1.8em 0 .3em}
+.dek{font-size:19px;color:var(--mute);margin:0 0 1em}
+.meta{font:13px/1.4 ui-sans-serif,system-ui,sans-serif;color:var(--mute);display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.meta button{font:13px ui-sans-serif,system-ui,sans-serif;border:1px solid var(--line);background:#fff;border-radius:6px;padding:3px 9px;cursor:pointer}
+.tldr{background:var(--panel);border-left:4px solid var(--accent);padding:14px 18px;margin:22px 0;border-radius:4px}
+.tldr p{margin:.5em 0}
+.tldr h4{margin:.1em 0 .4em;font:600 13px ui-sans-serif,system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
+.state{font:14px/1.5 ui-sans-serif,system-ui,sans-serif;color:var(--mute);border:1px dashed var(--line);padding:8px 12px;border-radius:6px;margin:14px 0}
+figure{margin:22px -60px;text-align:center}
+figure img{max-width:880px;width:100%;height:auto;border:1px solid var(--line);border-radius:4px;background:#fff}
+figcaption{font:14px/1.45 ui-sans-serif,system-ui,sans-serif;color:var(--mute);max-width:760px;margin:8px auto 0;text-align:left;padding:0 60px}
+figure.pending{margin:14px 0;border:1px dashed var(--line);border-radius:6px;padding:10px}
+figure.pending figcaption{padding:0}
+.finding h3{display:flex;gap:12px;align-items:baseline}
+.fnum{flex:none;font:600 13px ui-sans-serif,system-ui,sans-serif;color:#fff;background:var(--accent);border-radius:50%;width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;position:relative;top:-2px}
+.grade{font:12.5px ui-sans-serif,system-ui,sans-serif;color:var(--mute);margin:0 0 .6em 36px}
+.grade.g-established{color:var(--good)} .grade.g-preliminary{color:var(--warn)} .grade.g-prediction{color:var(--mute)} .grade.g-refuted{color:var(--bad)}
+.f-bound{font-size:15.5px;color:var(--mute)}
+code{font:14px ui-monospace,Menlo,monospace;background:#efede6;padding:1px 4px;border-radius:3px}
+pre{font:12.5px/1.45 ui-monospace,Menlo,monospace;background:#f1efe8;padding:10px 12px;border-radius:6px;overflow-x:auto;white-space:pre-wrap}
+table{border-collapse:collapse;font:14px/1.4 ui-sans-serif,system-ui,sans-serif;margin:14px 0;width:100%}
+th,td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+th{font-weight:600;color:var(--mute)}
+.wk{border:1px solid var(--line);border-radius:6px;margin:8px 0;padding:8px 12px;background:#fff}
+.wk summary{cursor:pointer;font:14px/1.5 ui-sans-serif,system-ui,sans-serif}
+.wid{font-weight:700;margin-right:8px}.wrole{color:var(--accent);margin-right:10px}.wage{color:var(--mute);font-size:12.5px}
+.whead{color:var(--ink);margin-top:3px}
+nav.toc{font:14px/1.5 ui-sans-serif,system-ui,sans-serif;margin:10px 0 0}
+nav.toc ol{margin:.3em 0;padding-left:1.3em}
+a{color:var(--accent)}
+[data-lang=en] .zh{display:none} [data-lang=zh] .en{display:none}
+details.more{margin:12px 0} details.more summary{cursor:pointer;font:14px ui-sans-serif,system-ui,sans-serif;color:var(--accent)}
+.katex{font-size:1.02em}
+@media(max-width:900px){figure{margin:18px 0}figcaption{padding:0}}
+</style></head>
+<body><main>
+<div class="meta"><span>rloop-v2 · overnight research program · built 2026-11-19 21:54 PST</span>
+<button id="langbtn" onclick="toggleLang()">中文</button></div>
+<h1>Can a scalar value net carry credit across a truncated backward pass?</h1>
+<p class="dek">An overnight program on value nets for language-model pretraining: predicting future loss at nanoGPT scale, and using a value net trained by temporal differences as the boundary condition of truncated backpropagation through time.</p>
+<div class="state">Program started 21:34 PST on 2026-11-19 and runs until 06:00. Eight GPU workers and one lead. Status at this build: the theory and the plan are written; no experiment has finished. Everything marked <i>prediction</i> was written before the runs.</div>
+<div class="tldr"><h4>Bottom line</h4>
+<p><b>No experimental result yet.</b> The first tables are expected around 23:00 PST.</p>
+<p>The theory gives one result that shapes the plan. Truncated backpropagation needs, at the cut, the
+derivative of the future loss with respect to the carried state <i>with the future tokens held fixed</i>.
+A scalar value net trained by temporal differences learns the expected future loss of the documents whose
+state looks like $s$. Its gradient is the needed derivative plus a second term, which measures how the mix
+of documents changes as the state moves. In language-model pretraining most of the variance of future loss
+is document difficulty, so the second term can dominate.</p>
+<p>The program therefore tests the scalar value in three forms: trained on the loss-to-go alone, trained with
+an added derivative target (Sobolev training), and with a second, non-differentiated input that carries the
+part of the value that is only predictive. The adjoint net of the original note is the reference.</p>
+</div>
+<nav class="toc"><b>Findings</b><ol><li><a href="#f1">A correct value can have the wrong gradient (theory)</a></li></ol></nav>
+<h2 id="findings">Findings</h2>
+<section class="finding" id="f1"><h3><span class="fnum">1</span>The gradient of a correctly fitted scalar value differs from the boundary signal by a confounding term</h3><div class="grade g-proved">proved under a density assumption; closed form below; not yet measured in a trained model</div><p class="f-what">Terms. The <i>carried state</i> $s_j$ is what the model passes from block $j-1$ to block $j$ (memory tokens, a cache, fast weights). The <i>pathwise adjoint</i> $\lambda_j=\nabla_s G_j(s_j,f)$ is the derivative of the remaining loss $G_j$ with respect to that state for the document's actual future tokens $f$; it is what full backpropagation would deliver at the cut. The <i>expected adjoint</i> $a(s)=\mathbb{E}[\lambda\mid s]$ is the best any learned boundary signal can do. The <i>value</i> $V(s)=\mathbb{E}[G\mid s]$ is what temporal-difference or Monte Carlo regression converges to.</p><p class="f-data">For a state with a smooth density, $$\nabla_s V(s)=a(s)+\mathrm{Cov}\big(G,\ \nabla_s\log p(f\mid s)\ \big|\ s\big).$$ The covariance term is zero when the future does not depend on the state, as in control problems where the state causes the future. Under teacher forcing the future tokens come from the document, and the state summarizes the same document, so the term measures how document difficulty varies across states. Earlier runs on this question found 80 to 90% of the variance of future loss between documents. The figure is a closed-form example: a two-coordinate state whose first coordinate is memory that lowers the loss, with a difficulty signal of strength $\|w\|$ that is either carried by the second, causally inert coordinate (a) or mixed into both (b). With value regression alone the fit is exact and the cosine to the expected adjoint falls with the confounding strength, and in case b it turns negative: following that gradient increases the true loss. A derivative target of weight $\beta$ reduces the surviving confounding by $1/(1+\beta)$ at a cost in value fit (c). A second, detached input removes the trade-off.</p><figure><img src="theory_confounding.png" alt="Closed-form example (state covariance $I$). a, b: cosine between the value net&#x27;s" loading="lazy"><figcaption>Closed-form example (state covariance $I$). a, b: cosine between the value net's gradient and the expected adjoint $a$, against the strength of the difficulty signal. c: share of the value's variance explained, case b; the red dashed line (value regression alone) and the green line stay at 100%. Formula: $\nabla C=a+w/(1+\beta)$.</figcaption></figure>
+<p class="f-bound">This is a statement about the fixed point of value regression. Whether the term is large in a trained language model with a carried state is an experiment (workers 3, 5 and 6).</p></section>
+<h2 id="open">Not established</h2>
+
+<p>Predictions written before the runs, with the result that would refute each. A row moves to the findings
+when its experiment has seeds, a control and an audit of the code path.</p>
+<table>
+<tr><th></th><th>Prediction</th><th>Refuted if</th></tr>
+<tr><td>Q0</td><td>With recurrent memory tokens on natural text, truncation to one segment loses most of the benefit of memory, and four segments recover it to within 0.01 nats. With a Transformer-XL cache, truncation costs under 0.01 nats.</td><td>Two-segment truncation is already within seed spread of the full backward pass in both models: nothing to restore on plain text.</td></tr>
+<tr><td>Q1</td><td>On delayed recall with a single delay of at least the window length, truncated training stays at chance and the full backward pass solves it.</td><td>Truncated training solves it.</td></tr>
+<tr><td>Q2</td><td>The value gradient from temporal differences alone has high value accuracy ($R^2>0.8$) and a parameter-gradient cosine at the level of a shuffled control; it gives no gain over truncation.</td><td>It closes more than 30% of the gap.</td></tr>
+<tr><td>Q3</td><td>Sobolev-trained scalar values and the adjoint net reach a batch-level cosine above 0.5 on synthetic tasks and close more than half of the gap.</td><td>An adjoint net supervised on exact adjoints stays below 0.3: the signal is not predictable from the state.</td></tr>
+<tr><td>Q4</td><td>Methods rank by gradient cosine, and value accuracy does not predict the ranking.</td><td>The ranking follows value accuracy.</td></tr>
+<tr><td>Q5</td><td>Removing the difficulty dependence of the loss repairs the plain value gradient on visited states.</td><td>It stays equally wrong.</td></tr>
+<tr><td>Q6</td><td>A value net with a detached second input matches the adjoint net where the expected adjoint is not a gradient field; the plain Sobolev value falls short there.</td><td>No separation.</td></tr>
+<tr><td>Q7</td><td>Adjoint temporal-difference learning is stable when the block Jacobian contracts (or a discount compensates). With non-overlapping windows of $K$ blocks, credit at lag $\tau$ keeps the weight $(1-\tau/K)_+$, so the relative error of the truncated gradient falls like $1/K$, and at $K=1$ the write path gets no gradient at all. (The first version of the theory predicted geometric decay; the proof audit refuted it.)</td><td>Divergence under contraction; a truncated-gradient error that falls faster than $1/K$.</td></tr>
+<tr><td>Q8</td><td>On natural text the per-boundary cosine of the best learner is below 0.2 while the batch-level cosine is several times larger.</td><td>The batch-level cosine of a supervised adjoint net is at the shuffled level.</td></tr>
+<tr><td>Q9</td><td>For value pretraining, temporal differences match a correctly normalized Monte Carlo head at 512 tokens and are the only option beyond the window; within-document $R^2$ stays under 0.1.</td><td>Temporal differences are worse by more than 0.03 at every horizon.</td></tr>
+</table>
+
+<h2 id="theory">Algorithms and theory</h2>
+
+<p>Setting, as in the note on value-gradient bootstrapping: blocks $x_0,\dots,x_{N-1}$, a carried state
+$s_{j+1}=U_\theta(s_j,x_j)$, block losses $\ell_j$, training windows of $K$ blocks whose entering state is
+detached. A boundary signal $g$ enters the window through the term $\langle \mathrm{sg}(g), s_{\text{end}}\rangle$.</p>
+<p><b>Error formula.</b> Summed over the windows of a document, the bootstrapped gradient differs from the
+full gradient by $$\hat\nabla(g)-\nabla_\theta L=\sum_m B_m^\top\,(g_m-\lambda_m),\qquad B_m=\frac{\mathrm{d}s_{\text{end}}}{\mathrm{d}\theta}\ \text{within window } m.$$
+Truncation is $g=0$. Only the part of the error that $\theta$ can reach through the window matters, and a signal
+with positive cosine in that metric improves on truncation when its scale is below twice the optimal one.
+With $g=\mathbb{E}[\lambda\mid\text{history}]$ the bootstrapped gradient is unbiased and has lower variance
+than the full backward pass.</p>
+<p><b>Candidates.</b></p>
+<table>
+<tr><th>name</th><th>boundary signal</th><th>trained on</th><th>fixed point</th></tr>
+<tr><td><code>trunc</code></td><td>$0$</td><td></td><td></td></tr>
+<tr><td><code>adj-td</code></td><td>adjoint net $A_\omega(s)$</td><td>differentiated Bellman equation</td><td>$a(s)$</td></tr>
+<tr><td><code>vg</code></td><td>$\nabla_s C_\psi(s)$</td><td>loss-to-go by temporal differences</td><td>$\nabla V=a+{}$confounding term</td></tr>
+<tr><td><code>sob-td</code></td><td>$\nabla_s C_\psi(s)$</td><td>value target and derivative target $\hat A_j$</td><td>between $\nabla V$ and the conservative part of $a$</td></tr>
+<tr><td><code>sobc-td</code></td><td>$\nabla_s C_\psi(s,\mathrm{sg}(s))$</td><td>same, with a detached second input</td><td>value $V$ and gradient $a$ together</td></tr>
+<tr><td><code>pert</code></td><td>$\nabla_s C_\psi(s)$</td><td>value differences between a state and a perturbed copy on the same tokens, forward passes only</td><td>gradient of the smoothed expected cost</td></tr>
+</table>
+<p>The derivative target is free: the backward pass of the window already computes
+$\hat A_j=\nabla_{s_j}\big[\sum_{r<j+K}\ell_r+\langle \mathrm{sg}(g_{j+K}),s_{j+K}\rangle\big]$ at the window start.
+Adjoint temporal-difference learning contracts at the rate of the $K$-block state Jacobian, which takes the
+place of a discount. The full derivations, with a grade for each statement (proved, derived, conditional,
+hypothesized, refuted), are in <code>shared/theory/ALGORITHMS.md</code> and <code>proofs.md</code> of the program directory.</p>
+
+<h2 id="status">Workers, live</h2>
+<p class="f-bound">Eight agents, each with a pod of four GPUs. Each line is the first line of the worker's own status file; open a row for the full file.</p>
+<details class="wk"><summary><span class="wid">w1</span><span class="wrole">segment-recurrent LM on FineWeb: shared code, cost of truncation</span><span class="wage">no status file yet</span></summary></details>
+<details class="wk"><summary><span class="wid">w2</span><span class="wrole">fast-weight (TTT-style) state: exact teacher, adjoint net</span><span class="wage">no status file yet</span></summary></details>
+<details class="wk"><summary><span class="wid">w3</span><span class="wrole">delayed-recall testbed; value gradient from TD alone; paired perturbation</span><span class="wage">no status file yet</span></summary></details>
+<details class="wk"><summary><span class="wid">w4</span><span class="wrole">Sobolev variants of the scalar value</span><span class="wage">no status file yet</span></summary></details>
+<details class="wk"><summary><span class="wid">w5</span><span class="wrole">exact adjoints and numerical tests of the theory</span><span class="wage">no status file yet</span></summary></details>
+<details class="wk"><summary><span class="wid">w6</span><span class="wrole">value-net pretraining at nanoGPT scale: TD against Monte Carlo</span><span class="wage">no status file yet</span></summary></details>
+<details class="wk"><summary><span class="wid">w7</span><span class="wrole">LSTM replication of synthetic gradients; scale and robustness</span><span class="wage">no status file yet</span></summary></details>
+<details class="wk"><summary><span class="wid">w8</span><span class="wrole">needle-in-natural-text benchmark; independent replication</span><span class="wage">no status file yet</span></summary></details>
+<h2 id="methods">Methods and reproducibility</h2>
+
+<p><b>Common setting.</b> Natural text: FineWeb documents with GPT-2 tokens, 64-token segments, 16 segments
+per stream, a 6-layer and a 12-layer model, with either 16 recurrent memory tokens or a cache of the previous
+segment as the carried state. Synthetic: delayed recall in which information written in one segment is
+queried a fixed number of segments later, with a per-document difficulty that the state can predict.
+All methods process the same tokens and take the same number of optimizer steps; they differ in the gradient
+estimate. The exact boundary adjoint from a chunked backward sweep is the reference, and its accumulated
+gradient must equal the full backward pass to $10^{-5}$.</p>
+<p><b>Metrics.</b> Held-out loss by segment index; the cosine between the parameter gradients produced by a
+learned boundary signal and by the exact one, summed over batches of 1, 16 and 256 documents, with a
+shuffled-document control and a split-half ceiling; value $R^2$ against Monte Carlo loss-to-go, total and
+within document.</p>
+<p><b>Evidence rules.</b> Predictions and their falsifiers are written before the runs. A positive result needs
+the shuffled control, at least two seeds and a fixed evaluation set. A negative result needs the exact-adjoint
+arm working in the same code.</p>
+
+</main>
+<script>
+function toggleLang(){var h=document.documentElement;var z=h.getAttribute('data-lang')==='zh';h.setAttribute('data-lang',z?'en':'zh');document.getElementById('langbtn').textContent=z?'中文':'English';try{localStorage.setItem('rloop-v2-lang',z?'en':'zh')}catch(e){}}
+(function(){try{if(localStorage.getItem('rloop-v2-lang')==='zh'){toggleLang()}}catch(e){}})();
+document.addEventListener('DOMContentLoaded',function(){if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}});
+</script>
+</body></html>
